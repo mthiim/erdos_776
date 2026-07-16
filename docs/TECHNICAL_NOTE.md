@@ -88,7 +88,9 @@ $$
 for every $i$.
 
 This is a formulation of the classical squashed-antichain profile theorem.
-A short proof is included to make the certificate self-contained.
+A short proof is included so that the profile reduction and greedy construction
+can be checked locally; Kruskal--Katona itself, in the cascade form stated
+above with colex attainment, is used as the classical black box.
 
 ### Necessity
 
@@ -116,15 +118,21 @@ $m_i\le\binom ni$.
 ### Sufficiency
 
 Choose the family from the top down. At the highest occupied level take the
-first $f_s$ sets in colex. Inductively, suppose that the down-closure at
-level $i$ of everything already chosen above is the colex initial segment
-of size $\partial_{i+1}(m_{i+1})$. Choose the next $f_i$ sets in colex,
-immediately following that segment. The hypothesis
-$m_i\le\binom ni$ ensures that these sets lie in $[n]$.
+first $f_s$ sets in colex. Inductively, suppose that at level $i+1$ the union
+of the down-closure of all higher chosen sets with the sets chosen on level
+$i+1$ is the colex initial segment of size $m_{i+1}$. Its lower shadow is
+therefore the colex initial segment of size $\partial_{i+1}(m_{i+1})$.
+Moreover, an $i$-set lies below some chosen set on a level above $i$ if and
+only if it lies below an intermediate $(i+1)$-set in this cumulative segment;
+this is just transitivity of containment through level $i+1$. Hence that
+shadow is exactly the level-$i$ down-closure of all higher choices.
 
-The lower chosen sets avoid the down-closure of all higher chosen sets, so
-the resulting family is an antichain with profile $f$. Shadows of colex
-initial segments are again colex initial segments, completing the induction.
+Choose the next $f_i$ sets in colex, immediately following this shadow. The
+hypothesis $m_i\le\binom ni$ ensures that these sets lie in $[n]$, and their
+union with the shadow is the colex initial segment of size $m_i$. This
+preserves the induction invariant. The newly chosen lower sets avoid the
+down-closure of all higher chosen sets, so the resulting family is an
+antichain with profile $f$.
 
 ## 3. The calculation at $(n,r)=(27,11)$
 
@@ -148,8 +156,10 @@ $$
 m_2=341+11=352>351=\binom{27}{2}.
 $$
 
-All other levels fit, but the single failure at level 2 is enough. Thus no
-11-multiplicity antichain on $[27]$ can use 24 distinct sizes, and
+The level-$2$ failure already proves infeasibility. For accuracy, level $1$
+also fails: the $2$-cascade of $352=\binom{27}{2}+\binom11$ gives
+$m_1=27+1=28>27$. Thus no 11-multiplicity antichain on $[27]$ can use
+24 distinct sizes, and
 
 $$
 g(27,11)\le23.
@@ -161,7 +171,7 @@ $$
 f_i=11\quad(2\le i\le24),
 $$
 
-the recurrence fits at every level; at the tightest level,
+the recurrence fits at every level. The useful bottom calculation is
 
 $$
 m_3=2413=\binom{25}{3}+\binom{15}{2}+\binom81,
@@ -170,6 +180,10 @@ m_3=2413=\binom{25}{3}+\binom{15}{2}+\binom81,
 \qquad
 m_2=327\le351.
 $$
+
+The actual tight capacity occurs one level lower:
+$327=\binom{26}{2}+\binom21$, so
+$m_1=\partial_2(327)=26+1=27=\binom{27}{1}$.
 
 The colex construction therefore supplies 11 sets on each of the 23 levels
 $2,\ldots,24$. The generated family has 253 sets and passes the independent
@@ -290,35 +304,47 @@ $$
 n_0(11)=27.
 $$
 
-## 5. Scope and open question
+## 5. Relation to the uniform companion result
 
-Exploratory computations motivate
-the conjecture
+This note deliberately keeps the exact $r=11$ proof self-contained. A
+separate companion manuscript in [`UNIFORM_THEOREM.md`](UNIFORM_THEOREM.md)
+gives an AI-assisted proof candidate for
 
 $$
-n_0(r)=2r+5\qquad(r\ge11),
+n_0(r)=2r+5\qquad(r\ge11).
 $$
 
-which would resolve the bounded-error question posed by He and Tang with
-optimal constant 5. Those finite scans are not used in the $r=11$ proof
-and do not establish the all-$r$ statement. No uniform proof is claimed
-here. The remaining work is to prove the relevant cascade/capacity
-identities and a uniform base-core construction.
+The exact calculation and stored certificates in this note do not depend on
+the uniform argument. Conversely, the uniform manuscript uses the same
+classical profile criterion and the core/padding framework developed here.
+The uniform argument has passed four adversarial AI audits but has not yet
+undergone traditional peer review; the repository records that distinction
+explicitly.
 
 ## References
 
-1. P. Erdős, *Problem sessions*, in I. Rival (ed.), *Ordered Sets*
-   (Proc. NATO Advanced Study Institute), Reidel, Dordrecht, 1981,
-   pp. 860–861.
-2. Y. He and Q. Tang, *An Erdős--Trotter problem on antichains with
-   multiplicity $r$ on each occurring level*, arXiv:2602.09803 (2026),
-   <https://arxiv.org/abs/2602.09803>.
-3. G. F. Clements, *A Minimization Problem Concerning Subsets of a Finite
-   Set*, Discrete Mathematics **4** (1973), 123–128.
-4. D. E. Daykin, J. Godfrey, and A. J. W. Hilton, *Existence Theorems for
-   Sperner Families*, Journal of Combinatorial Theory, Series A **17**
-   (1974), 245–251.
-5. P. Lieby, *Antichains on Three Levels*, Electronic Journal of
-   Combinatorics **11** (2004), R50. Theorem 2.8 records the classical
-   prescribed-profile squashing theorem:
-   <https://www.combinatorics.org/ojs/index.php/eljc/article/view/v11i1r50>.
+1. P. Erdős, Problem sessions, in I. Rival (ed.), Ordered Sets (Proc. NATO Advanced Study Institute),
+ Reidel, Dordrecht, 1981, pp. 860–861.
+
+2. R. K. Guy, A Miscellany of Erdős Problems, American Mathematical Monthly 90 (1983), no. 2, 118–120. DOI
+ (https://doi.org/10.1080/00029890.1983.11971168).
+
+3. Y. He and Q. Tang, An Erdős–Trotter problem on antichains with multiplicity (r) on each occurring level,
+ arXiv:2602.09803 (2026).
+
+4. J. B. Kruskal, The Number of Simplices in a Complex, in R. Bellman (ed.), Mathematical Optimization
+ Techniques, University of California Press, Berkeley, 1963, pp. 251–278. Publisher record
+ (https://www.degruyter.com/document/doi/10.1525/9780520319875-014/html).
+
+5. G. O. H. Katona, A Theorem of Finite Sets, in P. Erdős and G. Katona (eds.), Theory of Graphs (Proc.
+ Colloquium, Tihany, 1966), Academic Press, New York, and Akadémiai Kiadó, Budapest, 1968, pp. 187–207.
+ Academy repository (https://real.mtak.hu/21121/).
+
+6. G. F. Clements, A Minimization Problem Concerning Subsets of a Finite Set, Discrete Mathematics 4 (1973),
+ 123–128. DOI (https://doi.org/10.1016/0012-365X(73)90074-5).
+
+7. D. E. Daykin, J. Godfrey, and A. J. W. Hilton, Existence Theorems for Sperner Families, Journal of
+ Combinatorial Theory, Series A 17 (1974), 245–251. DOI (https://doi.org/10.1016/0097-3165(74)90011-9).
+
+8. P. Lieby, Antichains on Three Levels, Electronic Journal of Combinatorics 11 (2004), R50. Theorem 2.8
+ (https://www.combinatorics.org/ojs/index.php/eljc/article/view/v11i1r50).

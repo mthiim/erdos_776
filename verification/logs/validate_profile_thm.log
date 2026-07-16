@@ -1,0 +1,7 @@
+$ python3 computations/validate_profile_thm.py
+n=4: 26 achievable profiles
+n=4: exhaustive agreement across 700 candidate profiles
+n=5: 96 achievable profiles
+n=5: exhaustive agreement across 17424 candidate profiles
+n=6: 553 achievable profiles
+n=6: exhaustive agreement across 1053696 candidate profiles

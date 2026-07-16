@@ -1,100 +1,140 @@
-# Erdős Problem #776: antichain-profile certificates
+# Erdős Problem #776: complete threshold table (AI-assisted theorem candidate)
 
-This is a preliminary, reproducible research package for the
-Erdős–Trotter antichain problem ([Erdős Problem #776](https://www.erdosproblems.com/776)).
-This package was assembled on 15 July 2026 from an AI-assisted investigation and is
-being shared to invite mathematical scrutiny.
+This repository is a reproducible AI-assisted research
+package for the Erdős--Trotter antichain problem
+([Erdős Problem #776](https://www.erdosproblems.com/776)).
 
-## Results contained in this package
+## Main result
 
-The package gives a self-contained proof and executable checks for:
+For the threshold `n_0(r)` defined for `r>=2`, the package gives the complete
+candidate determination
 
-1. The classical squashed/colex characterization of feasible antichain
-   profiles, expressed as an iterated Kruskal–Katona recurrence.
-2. The exact value $g(27,11)=23$.
-   In particular, the profile with 11 sets on every level 2 through 25 is
-   impossible: its recurrence has
-   $m_2=352>\binom{27}{2}=351$. A 23-level profile is explicitly
-   constructed and checked.
-3. The exact threshold $n_0(11)=27$.
-   A core construction at $n=28$, followed by a two-point padding lemma,
-   gives a full-profile antichain for every $n\ge 28$.
+\[
+\boxed{
+ n_0(r)=
+ \begin{cases}
+ 3,&r=2,\\
+ 8,&r=3,\\
+ 2r+4,&4\le r\le10,\\
+ 2r+5,&r\ge11.
+ \end{cases}}
+\]
 
-The mathematical argument is in
-[`docs/TECHNICAL_NOTE.md`](docs/TECHNICAL_NOTE.md). These results have been
-checked computationally but have not yet been peer reviewed.
+The values at `r=2,3` are due to Yixin He and Quanyu Tang.  The exact finite
+range `4<=r<=10`, the independently certified case `r=11`, and the uniform
+argument for `r>=11` are documented here.
 
-## What is not claimed
+The original problem treats `r=1` separately: the relevant extremal number
+of occupied levels is `n-2`, whereas `n_0(r)` is defined for the `n-3`
+threshold when `r>=2`.
 
-Exploratory computations suggest
+## Components
 
-$$
-n_0(r)=2r+5 \qquad (r\ge 11),
-$$
+### Exact finite range `4 <= r <= 10`
 
-but this package does **not** claim that uniform statement. A finite scan is
-not a proof, and those computations are not used in the $r=11$ argument.
-General proofs of the remaining capacity/cascade statements are still being
-investigated. In particular, this repository should currently be cited as a
-preliminary exact result for $r=11$, not as a complete solution of Erdős
-Problem #776.
+The profile criterion gives an obstruction at `n=2r+4` and a tight
+construction at `n=2r+5`.  A canonical core on `r+5` points has `r` explicit
+free sets, so the same two-point padding mechanism covers every larger `n`.
+Thus
 
-## Quick verification
+\[
+n_0(r)=2r+4\qquad(4\le r\le10).
+\]
 
-The code uses only the Python standard library and requires Python 3.10 or
-newer.
+See [`docs/SMALL_R_NOTE.md`](docs/SMALL_R_NOTE.md) and the stored
+certificates under [`certificates/`](certificates/).
+
+### Exact case `r = 11`
+
+The package proves and directly certifies
+
+\[
+g(27,11)=23,
+\qquad
+n_0(11)=27.
+\]
+
+The 24-level profile on `[27]` fails at level 2:
+
+\[
+m_2=352>\binom{27}{2}=351.
+\]
+
+An explicit 253-set antichain gives the matching 23-level lower bound.  A
+checked core, 11 stored free sets, and a two-point padding chain give the
+full profile for every `n>=28`.
+
+See [`docs/TECHNICAL_NOTE.md`](docs/TECHNICAL_NOTE.md).
+
+### Uniform theorem candidate for `r >= 11`
+
+The companion manuscripts give an AI-assisted proof candidate for
+
+\[
+\boxed{n_0(r)=2r+5\qquad(r\ge11).}
+\]
+
+Their main ingredients are the classical prescribed-profile squashing
+theorem and Kruskal--Katona, a reverse-envelope proof of the upper core
+window, a uniform lower-window supersolution, an exact core-carry identity,
+explicit free sets and indefinite padding, and a diagonal cascade transfer
+that obstructs `n=2r+5`.
+
+See [`docs/UNIFORM_THEOREM.md`](docs/UNIFORM_THEOREM.md) and
+[`docs/L4_PROOF.md`](docs/L4_PROOF.md).
+
+## Review status
+
+Four adversarial AI audits found no mathematical error in a load-bearing
+argument. 
+
+Some parts of the argument have undergone human review, but especially the L4 proof requires much more scrutiny.
+
+## Stable proof document
+
+A single combined source and PDF are included under [`paper/`](paper/):
+
+```text
+paper/erdos776_complete_thresholds.md
+paper/erdos776_complete_thresholds.pdf
+```
+
+The PDF combines the profile theorem, exact `r=11` note, small-`r` theorem,
+L4 proof, and uniform theorem into one dated review document.
+
+## One-command verification
+
+Python 3.10 or newer is sufficient; only the standard library is used.
 
 ```bash
-python3 tests/verify_r11.py
+python3 tests/verify_all.py
 ```
 
 Expected final line:
 
 ```text
-ALL RELEASE CHECKS PASSED
+ALL COMPLETE-THRESHOLD RELEASE CHECKS PASSED
 ```
 
-Individual commands:
+The command runs:
 
-```bash
-# Impossibility of the 24-level profile at (n,r)=(27,11)
-python3 src/ep776_profile.py full 27 11
+- the release-critical `r=11` certificate and padding checks;
+- an independent exact proof/certificate check of
+  `n_0(r)=2r+4` for every `4<=r<=10`;
+- the exact lower-window finite base `11<=r<=377`, with named seam checks at
+  `r=377,378,379`;
+- the exact L4 finite base `11<=r<=28`, including the precise level-2
+  overflow, and symbolic-formula checks;
+- a supplementary exact uniform-assembly cross-check;
+- exhaustive comparison of the prescribed-profile criterion with every
+  antichain profile for `n=4,5,6`.
 
-# Full-profile construction at n=28
-python3 src/ep776_profile.py full 28 11 --emit
+The scripts and their logical roles are documented in
+[`verification/README.md`](verification/README.md).
 
-# Explicit padding checks through n=33
-python3 src/ep776_padding.py 11 --stages 3
+## Attribution and responsibility
 
-# Check the supplied witnesses for r=11,...,20
-python3 src/ep776_check.py certificates/2r_plus_6_r_11_to_20.txt
+The work was developed through a human-led collaboration involving multiple
+language models.  A contribution-level account is in
+[`docs/AI_ASSISTANCE_AND_CREDITS.md`](docs/AI_ASSISTANCE_AND_CREDITS.md).
 
-# Regenerate the explicit 23-level r=11 certificate
-python3 tools/generate_certificates.py
-```
-
-The checker in `src/ep776_check.py` is independent of the
-Kruskal–Katona/colex arithmetic: it performs direct pairwise containment and
-profile tests on the constructed sets.
-
-## Repository layout
-
-```text
-README.md                    this file
-docs/TECHNICAL_NOTE.md
-src/                         core algorithms and independent checker
-tests/verify_r11.py          one-command release verification
-tools/generate_certificates.py
-certificates/                explicit witness files
-computations/                optional exhaustive small-n validator
-```
-
-## Attribution and transparency
-
-The investigation and code were developed with extensive language-model
-assistance. 
-
-The profile-squashing theorem is classical and is attributed here to
-Clements and to Daykin–Godfrey–Hilton. See the references in the technical
-note. The application to the $r=11$ instance is the point being offered for
-review.

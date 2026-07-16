@@ -23,12 +23,13 @@ Mathematical basis (elementary, from Kruskal-Katona):
 
 Consequences used here:
 
-  * Whenever a separate missing-level argument shows that every
-    (n-3)-level witness must occupy exactly {2,...,n-2}, the question
-    g(n,r)=n-3 is equivalent to feasibility of the profile with f_i=r on
-    those levels.  Section 1 of docs/TECHNICAL_NOTE.md gives the elementary
-    argument needed for the (n,r)=(27,11) result.  No such reduction is
-    assumed automatically for arbitrary small parameters.
+  * For r >= 4, an elementary singleton/complement argument shows that an
+    (n-3)-level witness must occupy exactly {2,...,n-2}: if level 1 occurs,
+    r singleton members leave at most n-r <= n-4 occupied sizes, and
+    complementation handles level n-1.  Thus g(n,r)=n-3 is equivalent to
+    feasibility of the profile with f_i=r on those levels.  The r=11 note
+    and the uniform companion manuscript both state this reduction
+    explicitly.
 
   * The "core" problem (r sets of every size 2..s on q points, an
     antichain) is likewise a profile question with f_i = r for 2 <= i <= s.

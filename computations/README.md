@@ -1,9 +1,15 @@
-# Optional computations
+# Exhaustive profile validation
 
-The main release check is `tests/verify_r11.py`.
+The full release check is:
 
-`validate_profile_thm.py` is a slower, optional hostile check of the profile
-criterion. It enumerates every antichain profile on $[n]$ for
+```bash
+python3 tests/verify_all.py
+```
+
+`validate_profile_thm.py` is the slower exhaustive check of the profile
+criterion included in that release suite. It enumerates every antichain
+profile on $[n]$ for
+
 $n=4,5,6$, then compares that set against the exact criterion for every
 candidate profile vector within the level capacities.
 

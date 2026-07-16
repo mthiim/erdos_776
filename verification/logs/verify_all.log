@@ -1,0 +1,47 @@
+
+$ python3 tests/verify_r11.py
+[OK] generic empty-profile and level-0 construction edge cases
+[OK] finite-scan endpoint convention
+[OK] n=27, r=11 full profile is infeasible: m_2=352 > 351
+[OK] explicit 23-level family: 253 sets, no containments
+[OK] explicit n=28 full-profile family: 275 sets, no containments
+[OK] base core q=16, s=13 and its 88 free 12-sets
+[OK] on-disk 132-set core and 11 explicitly listed free 12-sets
+[OK] three padding stages and full witnesses for n=28,...,33
+[OK] supplied full-profile witnesses for r=11,...,20
+[OK] on-disk r=11, n=27, 23-level certificate
+ALL RELEASE CHECKS PASSED
+
+$ python3 verification/verify_small_r_exact.py
+[OK] r=4: n=12 fails by 1; n=13 witness checked; core/free sets and 5 padding stages checked
+[OK] r=5: n=14 fails by 1; n=15 witness checked; core/free sets and 5 padding stages checked
+[OK] r=6: n=16 fails by 1; n=17 witness checked; core/free sets and 5 padding stages checked
+[OK] r=7: n=18 fails by 2; n=19 witness checked; core/free sets and 5 padding stages checked
+[OK] r=8: n=20 fails by 2; n=21 witness checked; core/free sets and 5 padding stages checked
+[OK] r=9: n=22 fails by 2; n=23 witness checked; core/free sets and 5 padding stages checked
+[OK] r=10: n=24 fails by 2; n=25 witness checked; core/free sets and 5 padding stages checked
+[OK] core carry changes sign between r=10 and r=11
+PASS: n_0(r)=2r+4 is certified for every 4 <= r <= 10
+
+$ python3 verification/verify_l4.py
+PASS: exact L4 finite base for every 11 <= r <= 28; the first overflow is m_2 = binom(r+4,2) + 1
+PASS: L4 reverse-envelope formulas at 29, 30, 31, 40, 60, 100, 200, 400, 1000
+
+$ python3 verification/verify_uniform_finite.py
+PASS: exact finite assembly cross-check for every 11 <= r <= 120
+observed core carry range: 1 <= e_r <= 2
+
+$ python3 verification/verify_lower_window_base.py
+PASS: exact lower-window check for every 11 <= r <= 377
+minimum slack = 3, attained at r=20, level=2
+PASS: lower-window finite/symbolic seam at r=377,378,379; minimum slack is 3 at level 2 in each case
+
+$ python3 computations/validate_profile_thm.py
+n=4: 26 achievable profiles
+n=4: exhaustive agreement across 700 candidate profiles
+n=5: 96 achievable profiles
+n=5: exhaustive agreement across 17424 candidate profiles
+n=6: 553 achievable profiles
+n=6: exhaustive agreement across 1053696 candidate profiles
+
+ALL COMPLETE-THRESHOLD RELEASE CHECKS PASSED
