@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Lean
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-mathlib-cache: false
+
+      - name: Download mathlib cache
+        run: lake exe cache get
+
+      - name: Build Lean with warnings as errors
+        run: lake build --wfail
+
+      - name: Run independent Python verification
+        run: python3 tests/verify_all.py
+
+      - name: Reject Lean placeholders and source axioms
+        run: python3 tools/check_lean_placeholders.py
+
+      - name: Check GitHub-compatible Markdown math
+        run: python3 tools/check_github_math.py
+
+      - name: Audit theorem axioms
+        run: python3 tools/check_axiom_audit.py
+
+      - name: Install paper dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends \
+            pandoc texlive-xetex texlive-latex-extra \
+            texlive-fonts-recommended lmodern \
+            fonts-dejavu fonts-dejavu-extra
+
+      - name: Build combined paper
+        run: ./paper/build_pdf.sh
+
+      - name: Check generated combined source is current
+        run: git diff --exit-code -- paper/erdos776_complete_thresholds.md

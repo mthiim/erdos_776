@@ -7,9 +7,9 @@ Throughout, `g(n,r)` is the maximum number of occupied levels in an
 `r`-multiplicity antichain on `[n]`, and `n_0(r)` is the least integer
 `n_0` such that
 
-\[
+$$
 g(n,r)=n-3\qquad\text{for every }n>n_0.
-\]
+$$
 
 The definition of `n_0(r)` is used for `r>=2`.  The original problem treats
 `r=1` separately, where the extremal number of occupied levels is `n-2`
@@ -19,25 +19,25 @@ rather than `n-3`.
 
 For every integer `r` with `4 <= r <= 10`,
 
-\[
+$$
 \boxed{n_0(r)=2r+4.}
-\]
+$$
 
 Together with He--Tang's exact values
 
-\[
+$$
 n_0(2)=3,\qquad n_0(3)=8,
-\]
+$$
 
-and the companion uniform theorem candidate
+and the companion uniform theorem
 
-\[
+$$
 n_0(r)=2r+5\qquad(r\ge11),
-\]
+$$
 
 this gives the complete threshold table for every value `r>=2`:
 
-\[
+$$
 \boxed{
  n_0(r)=
  \begin{cases}
@@ -46,65 +46,72 @@ this gives the complete threshold table for every value `r>=2`:
  2r+4,&4\le r\le10,\\
  2r+5,&r\ge11.
  \end{cases}}
-\]
+$$
 
-The last line retains the review status of `docs/UNIFORM_THEOREM.md`; the
-finite statement proved in this note is independent of the symbolic
+The last line is formalized in Lean together with the finite statement proved
+in this note.  Both retain the package-wide status of pending independent
+specialist peer review; this finite proof is independent of the symbolic
 large-`r` phase argument.
+
+Lean formalizes this entire range in
+`Erdos776/Uniform/SmallRangeCertificate.lean`: one closed seven-value check
+certifies the obstruction, the first fitting full profile, and the base core;
+profile sufficiency, puncturing, padding, and global leastness are then
+symbolic theorems. The endpoint is `isErdosThreshold_of_ge_4_le_10`.
 
 ## 1. Reduction to a prescribed profile
 
 For `r>=4`, an `r`-multiplicity antichain with `n-3` occupied levels must
 use exactly the levels
 
-\[
+$$
 2,3,\ldots,n-2.
-\]
+$$
 
 Indeed, levels `0` and `n` cannot occur.  If level `1` occurs, choose `r`
 singleton members.  Every other member avoids those `r` points, so all
 occupied sizes lie in
 
-\[
+$$
 1,2,\ldots,n-r,
-\]
+$$
 
 and there are at most `n-r <= n-4` of them.  Complementation excludes
-level `n-1` in an `n-3`-level witness.  Trimming every occupied level to
-exactly `r` members preserves the antichain property and the set of
-occupied levels.
+level `n-1` in an `n-3`-level witness.
 
 Consequently, for `r>=4`, equality `g(n,r)=n-3` is equivalent to
 feasibility of the full prescribed profile
 
-\[
+$$
 f_i=r\quad(2\le i\le n-2),
 \qquad f_i=0\quad\text{otherwise}.
-\]
+$$
 
 We use the classical Clements--Daykin--Godfrey--Hilton criterion in the
-form proved in `docs/TECHNICAL_NOTE.md`: if
+asymmetric form proved in `docs/TECHNICAL_NOTE.md`: if
 
-\[
+$$
 m_s=f_s,\qquad
 m_i=f_i+\partial_{i+1}(m_{i+1}),
-\]
+$$
 
-then the profile is feasible on `[n]` if and only if
+then an antichain with at least `f_i` members forces
 
-\[
+$$
 m_i\le\binom ni
-\]
+$$
 
-at every relevant level.
+at every relevant level. Conversely, these inequalities construct a colex
+antichain with exactly profile `f`. Thus no trimming is needed for the
+obstruction, while the same recurrence gives the exact construction.
 
 ## 2. The obstruction at `n=2r+4`
 
 For each `4<=r<=10`, run the exact recurrence for the full profile at
 
-\[
+$$
 n=2r+4.
-\]
+$$
 
 It overflows at level `2` as follows.
 
@@ -120,15 +127,15 @@ It overflows at level `2` as follows.
 
 Thus
 
-\[
+$$
 g(2r+4,r)<2r+1=(2r+4)-3,
-\]
+$$
 
 so the threshold cannot be smaller than `2r+4`:
 
-\[
+$$
 n_0(r)\ge2r+4.
-\]
+$$
 
 Only this single failed value is needed for the threshold lower bound.  If
 `n_0(r)<=2r+3`, the definition would require success at `n=2r+4`.
@@ -137,9 +144,9 @@ Only this single failed value is needed for the threshold lower bound.  If
 
 At
 
-\[
+$$
 n=2r+5,
-\]
+$$
 
 the same recurrence is feasible for every `4<=r<=10`, and it is exactly
 tight at level `2`:
@@ -163,21 +170,23 @@ certificates/small_r_full_witnesses_r4_to_10.txt
 ```
 
 and are checked by direct pairwise containment tests, independently of the
-shadow computation.
+shadow computation. Lean constructs the same semantic existence result from
+the checked capacities through `profile_sufficiency`; the stored files are
+not logical inputs to the Lean theorem.
 
 Hence
 
-\[
+$$
 g(2r+5,r)=2r+2=(2r+5)-3.
-\]
+$$
 
 ## 4. A base core and explicit free sets
 
 For each `4<=r<=10`, put
 
-\[
+$$
 q=r+5,\qquad s=r+2.
-\]
+$$
 
 The core profile with `r` sets on every level `2,...,s` is feasible on
 `q` points.  Its bottom recurrence values are:
@@ -193,48 +202,42 @@ The core profile with `r` sets on every level `2,...,s` is feasible on
 | 10 | 15 | 101 | 105 | 4 |
 
 The canonical colex core has an explicit family of `r` free
-`(s-1)=(r+1)`-sets.  Write
+`(s-1)=(r+1)`-sets. Write
 
-\[
+$$
 X=[q-2],\qquad J=\{4,5,\ldots,q-2\}.
-\]
+$$
 
 The first `r=q-5` top-level core sets are
 
-\[
-X\setminus\{j\},\qquad j\in J.
-\]
+$$
+T_j=X\setminus\{j\},\qquad j\in J.
+$$
+Indeed, the top state $r$ has a cascade of $r$ unit diagonal digits. Its
+colex realization consists exactly of the $(r+2)$-subsets of
+$X=[r+3]$ obtained by deleting one of the $r$ points in
+$J=\{4,\ldots,r+3\}$.
 
-Among the `(q-4)`-subsets of `X`, their shadow misses exactly
+We use one elementary observation.
 
-\[
-X\setminus\{1,2\},\qquad
-X\setminus\{1,3\},\qquad
-X\setminus\{2,3\}.
-\]
+**Puncturing lemma.** If `C` is an antichain, `T` belongs to `C`, and
+`D` is a proper subset of `T`, then `D` contains no member of `C`.
 
-These are the first three available sets in colex.  The down-closure of
-the top sets together with these three sets contains every subset of `X`
-of size at most `q-5`: a subset not containing all of `J` lies in a top
-set, while a subset of size at most `|J|=q-5` that contains all of `J` is
-`J` itself and lies in each exceptional set.
+Indeed, if `A` belongs to `C` and `A` is contained in `D`, then `A` is
+contained in `T`. Antichainness forces `A=T`, contradicting the fact that
+`T` is not contained in its proper subset `D`.
 
-It follows that every later core member contains `q-1` or `q`.  For each
-`j in J`, define
+For each `j in J`, puncture the displayed top member at the common point `1`:
 
-\[
-D_j=[q]\setminus\{1,j,q-1,q\}.
-\]
+$$
+D_j=T_j\setminus\{1\}
+   =[q]\setminus\{1,j,q-1,q\}.
+$$
 
-There are exactly `r` such sets, each of size `q-4=r+1`.  No core member
-is contained in `D_j`:
-
-- a top member is larger than `D_j`;
-- each of the three exceptional members has the same size and contains
-  `j`, whereas `D_j` omits `j`;
-- every later member contains `q-1` or `q`, while `D_j` contains neither.
-
-Thus the `D_j` are free.  The complete stored cores and free sets are in
+There are exactly `r` distinct such sets, each has size `q-4=r+1`, and
+`D_j` is a proper subset of the core member `T_j`. The puncturing lemma says
+immediately that every `D_j` is free. No classification of any other core
+member is required. The complete stored cores and free sets are in
 
 ```text
 certificates/small_r_cores_and_free_sets_r4_to_10.txt
@@ -247,18 +250,18 @@ any large-`r` hypothesis.  If a core on `q` points has `r` sets on levels
 `2,...,s` and free sets `D_1,...,D_r` of size `s-1`, then adding two new
 points `x,y` and the sets
 
-\[
+$$
 D_i\cup\{x,y\}\qquad(1\le i\le r)
-\]
+$$
 
 produces a core with the next occupied level.
 
 Freeness persists indefinitely.  After earlier padding pairs
 `{x_h,y_h}`, use
 
-\[
+$$
 D_i^{(t)}=D_i\cup\{x_1,\ldots,x_t\}.
-\]
+$$
 
 A base-core member cannot lie in `D_i^{(t)}` because it would lie in
 `D_i`, and a member born at stage `h` contains `y_h`, which
@@ -266,30 +269,30 @@ A base-core member cannot lie in `D_i^{(t)}` because it would lie in
 
 Starting from `(q,s)=(r+5,r+2)`, after `t` stages the core parameters are
 
-\[
+$$
 (q_t,s_t)=(r+5+2t,r+2+t).
-\]
+$$
 
 The core-to-full construction then gives the full profile for both
 
-\[
+$$
 n=2r+6+2t
 \quad\text{and}\quad
 n=2r+7+2t.
-\]
+$$
 
 Therefore
 
-\[
+$$
 g(n,r)=n-3\qquad\text{for every }n\ge2r+6.
-\]
+$$
 
 Together with the direct full-profile construction at `n=2r+5`, this
 proves
 
-\[
+$$
 n_0(r)\le2r+4.
-\]
+$$
 
 Combining with Section 2 gives the theorem.
 
@@ -300,9 +303,9 @@ The finite thresholds also explain why the uniform formula changes at
 `r=11`.  Let `A=r+4`, and run the upper core recurrence with `r` sets on
 levels `2,...,r+2`.  Write
 
-\[
+$$
 a_3=\binom A3+e_r.
-\]
+$$
 
 Exact cascade arithmetic gives
 
@@ -314,9 +317,9 @@ Thus the core residual remains below the binomial shell through `r=10`,
 but crosses it at `r=11`.  This is the same carry that, in the uniform
 argument, obstructs the full profile at `n=2r+5`.  The threshold jump
 
-\[
+$$
 2r+4\longrightarrow 2r+5
-\]
+$$
 
 therefore coincides with a sign change in a single combinadic residual.
 This observation is explanatory rather than a separate proof dependency.
@@ -327,6 +330,7 @@ Run
 
 ```bash
 python3 verification/verify_small_r_exact.py
+lake build Erdos776.Uniform.SmallRangeCertificate
 ```
 
 The script is independent of the project profile implementation.  It:
@@ -341,7 +345,7 @@ The script is independent of the project profile implementation.  It:
 Expected final lines:
 
 ```text
-PASS: n_0(r)=2r+4 is certified for every 4 <= r <= 10
+PASS: exact finite obstruction, construction, and padding checks passed (4 <= r <= 10)
 ```
 
 The proof for all larger `n` is the symbolic persistent-padding argument in

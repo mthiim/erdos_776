@@ -3,12 +3,18 @@
 This project was coordinated by a human researcher and developed with
 substantial assistance from several language models. 
 
-## Human project lead
+## Human coordinator and maintainer
+
+`mthiim` coordinates and maintains the repository and is responsible for
+preserving the submitted artifact, reporting corrections, and maintaining the
+contribution record. This responsibility does not assert sole personal
+origination of the proof. The language models are not treated as accountable
+authors or independent certifiers.
 
 - selected the problem and research direction;
-- coordinated the independent model sessions and audits;
+- coordinated the separate model sessions and review passes;
 - preserved and transferred intermediate packages between sessions;
-- decided which claims and proof routes to pursue;
+- decided which claims and proof routes to pursue.
 
 ## Collaborating LLM A - Claude Fable 5 (Anthropic; proof-development session)
 
@@ -34,9 +40,9 @@ the original package:
 
 Principal contributions in this collaboration:
 
-- independent audit of the original package, including discovery and repair
+- a separate audit of the original package, including discovery and repair
   of the missing occupied-level reduction;
-- independent checking of the `r=11` arithmetic, certificates, core, free
+- separate checking of the `r=11` arithmetic, certificates, core, free
   sets, and indefinite padding argument;
 - the diagonal Kruskal--Katona identity and its transfer application;
 - the explicit uniform family of free sets in the canonical core;
@@ -46,19 +52,34 @@ Principal contributions in this collaboration:
   compressed phases, one-digit rising tail, generalized envelope, and
   scalar bottom collapse;
 - assembly and editing of the uniform theorem;
-- independent derivation and certification of
+- a separate derivation and exact cross-check of
   `n_0(r)=2r+4` for every `4<=r<=10`, including the finite obstruction,
   full witnesses, core/free-set certificates, and persistent-padding
   verifier;
 - integration of the adversarial audits, complete-threshold package,
   proof-dossier PDF, and release tooling.
 
-## OpenAI GPT-5.6 Sol-Max (Codex)
+## OpenAI Codex (including GPT-5.6 Sol-Max) - audit and Lean formalization
+
+Principal contributions across the audit and formalization sessions:
+
 - performed a second hostile audit of Sections 3--11 and the theorem
   assembly;
 - found no counterexample in the intended domain;
 - identified release-critical written defects, including the unstated phase
   invariant, false unqualified shadow wording, missing hypotheses for the
   diagonal identity, compressed reflection/transfer arguments, and
-  incomplete packaging.
-
+  incomplete packaging;
+- formalized canonical cascades, finite colex realization, numerical shadows,
+  and the prescribed-profile necessity/sufficiency bridge;
+- formalized semantic L4, diagonal shell transfer, the upper-core carry,
+  punctured free core, persistent padding, core-to-full, occupied-level
+  reduction, and global leastness;
+- completed the symbolic lower-window proof for `r>=378` and built the
+  ground-bounded evaluator and sound finite certificates for all remaining
+  values `r>=4`;
+- added the original-formulation final theorem, theorem crosswalk, proof guide,
+  axiom/source audits, and CI integration;
+- simplified the human proof around the carry interface, asymmetric profile
+  criterion, no-carry shell principle, lower-window segment table, and
+  puncturing lemma.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fast independent finite-base verifier for the EP776 lower window.
+"""Fast, independently implemented lower-window finite-base cross-check.
 
 Checks every integer 11 <= r <= 377 using exact arithmetic and a
 precomputed Pascal triangle.  It also checks r = 377, 378, 379 explicitly
@@ -83,17 +83,28 @@ def check_r(r: int) -> tuple[bool, int, int]:
 
 def main() -> None:
     global_minimum = None
+    minimum_attainments: list[tuple[int, int]] = []
     for r in range(11, FINITE_BASE_MAX_R + 1):
         feasible, slack, level = check_r(r)
         if not feasible:
             raise SystemExit(f"FAIL: r={r}, deficit={-slack}, level={level}")
-        candidate = (slack, r, level)
-        if global_minimum is None or candidate < global_minimum:
-            global_minimum = candidate
+        if global_minimum is None or slack < global_minimum:
+            global_minimum = slack
+            minimum_attainments = [(r, level)]
+        elif slack == global_minimum:
+            minimum_attainments.append((r, level))
     assert global_minimum is not None
-    slack, r, level = global_minimum
+    expected_attainments = [(r, 2) for r in range(20, FINITE_BASE_MAX_R + 1)]
+    if global_minimum != 3 or minimum_attainments != expected_attainments:
+        raise SystemExit(
+            "FAIL: unexpected global minimum-slack pattern: "
+            f"minimum={global_minimum}, attainments={minimum_attainments}"
+        )
     print("PASS: exact lower-window check for every 11 <= r <= 377")
-    print(f"minimum slack = {slack}, attained at r={r}, level={level}")
+    print(
+        "minimum slack = 3, attained at level 2 for every "
+        "20 <= r <= 377 (first attained at r=20)"
+    )
 
     # Regression checks at the finite/symbolic seam.  The recurrence is
     # deterministic, so record the exact minimum slack as well as feasibility.

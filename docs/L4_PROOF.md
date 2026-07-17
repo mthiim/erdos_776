@@ -1,32 +1,43 @@
 # L4: a proof that α_r ≤ r − 1 (all r ≥ 29)
 
-*Standalone companion to `UNIFORM_THEOREM.md`. The proof is symbolic for
-all \(r\ge29\); the finite range \(11\le r<29\) is checked by
-`verification/verify_l4.py`. This note uses only the classical
+*Standalone companion to `UNIFORM_THEOREM.md`. The proof written here is
+symbolic for all $r\ge29$. In the final Lean theorem the range
+$11\le r<29$ is closed by a direct bounded upper-core/overflow
+certificate; `verification/verify_l4.py` remains an independently implemented
+exact cross-check of L4 on that finite range. This note uses only the classical
 Kruskal--Katona shadow function and elementary binomial identities.*
 
 
 ## Cascade notation
 
-For \(m\ge0\) and \(k\ge1\), write the canonical cascade
-\[
+For $m\ge0$ and $k\ge1$, write the canonical cascade
+$$
 m=\binom{a_k}{k}+\binom{a_{k-1}}{k-1}+\cdots+\binom{a_s}{s},
 \qquad a_k>a_{k-1}>\cdots>a_s\ge s,
-\]
+$$
 and define
-\[
+$$
 \partial_k(m)=\binom{a_k}{k-1}+\binom{a_{k-1}}{k-2}+\cdots+
 \binom{a_s}{s-1}.
-\]
-We use monotonicity of \(\partial_k\), Pascal's identity, and the fact that
+$$
+We use monotonicity of $\partial_k$, Pascal's identity, and the fact that
 shadowing a displayed canonical cascade lowers each position by one.
 
 ## 0. Statement
 
+Here $\alpha_r$ is the largest integer $y$ for which the profile with $r$
+sets at every level $2,\ldots,r$ and $y$ sets at level $r+1$ is feasible on
+$A=r+4$ points. Equivalently, it is the largest top value whose canonical
+profile recurrence fits every capacity; this equivalence is the
+prescribed-profile criterion.
+
 **Theorem L4.** For every r ≥ 29 the profile [r sets of every size
 2..r, r sets of size r+1] on A = r+4 points is infeasible; equivalently
-α_r ≤ r−1. The finite range 11 ≤ r < 29 is checked exactly by
-`verification/verify_l4.py`.
+α_r ≤ r−1. Lean kernel-checks this semantic theorem in
+`Erdos776/L4/Profile.lean`. The finite range 11 ≤ r < 29 is checked exactly
+by `verification/verify_l4.py`; the final Lean threshold theorem handles
+that range through its smaller direct certificate rather than importing the
+Python result.
 
 By DGH/Clements necessity, feasibility would give the chain
 
@@ -131,8 +142,8 @@ the displayed canonical cascades, for r ≥ 15:
     (positions r−2, r−3, r−4 for the three leading terms). ∎
 
 (These three identities are re-verified numerically for every r in the
-verification range; the verifier recomputes the chain with the
-independent exact kk_shadow.)
+verification range; the verifier recomputes the chain with a separately
+implemented exact `kk_shadow`.)
 
 ## 3. The contradiction
 
@@ -157,31 +168,26 @@ is infeasible and α_r ≤ r − 1 for all r ≥ 29. ∎
    the forward chain is used only three levels deep, so no top-zone
    budget arises. L4 is proved for ALL r ≥ 29.
 2. **Reverse-step margins.** The quantity
-   \(r+\partial_i(\widehat G_i+1)-\widehat G_{i-1}\) equals 1 for
-   \(i=3,\ldots,7\), equals \(r+135\) at \(i=8\), and has the exact
+   $r+\partial_i(\widehat G_i+1)-\widehat G_{i-1}$ equals 1 for
+   $i=3,\ldots,7$, equals $r+135$ at $i=8$, and has the exact
    positive values displayed above thereafter. The final contradiction
-   margin is positive (and equals \(r\) for \(r\ge31\)). The knife-edge lives entirely in the six head
-   computations — which mirror (and were extracted from) the exactly
-   tight true-anchor envelope.
-3. **Sharper nearby behavior (not needed).** Exploratory exact
-   computations in the research-history notes suggest the stronger value
-   \(\alpha_r=r-2\) over a substantial tested range. This is not used or
-   claimed here.
-4. **Verification.** `verification/verify_l4.py` checks the exact finite
-   base \(11\le r<29\) and recomputes every reverse step, the three top
+   margin is positive (and equals $r$ for $r\ge31$). Thus all tight
+   cases are confined to the six explicit head computations above.
+3. **Verification.** `verification/verify_l4.py` checks the exact finite
+   base $11\le r<29$ and recomputes every reverse step, the three top
    identities, and the final margin at representative values through
-   \(r=1000\). The proof above is symbolic and
+   $r=1000$. The proof above is symbolic and
    does not depend on any stress test.
 
 ## 5. Consequences (dependency update)
 
-With L4 proved for \(r\ge29\), and the finite base checked for
-\(11\le r<29\):
+With L4 proved for $r\ge29$, and the finite base checked for
+$11\le r<29$:
 
 - L5 follows immediately. Its two top singleton loads induce cumulative
-  load \(r+3\) at level \(r+1\), larger than the L4-admissible maximum
-  \(r-1\).
+  load $r+3$ at level $r+1$, larger than the L4-admissible maximum
+  $r-1$.
 - The one-seed residual recurrence used in the full-profile obstruction
   dominates the L4 recurrence by monotonicity.
 - Together with the uniform lower-window theorem in `UNIFORM_THEOREM.md`,
-  this supplies the upper half of the core window for every \(r\ge11\).
+  this supplies the upper half of the core window for every $r\ge11$.

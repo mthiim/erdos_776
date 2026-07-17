@@ -19,8 +19,14 @@ python3 - "$OUT_MD" <<'PYFIX'
 from pathlib import Path
 import sys
 p = Path(sys.argv[1])
-s = p.read_text(encoding="utf-8").replace("∎", r"\(\square\)")
-for name in ("TECHNICAL_NOTE.md", "SMALL_R_NOTE.md", "L4_PROOF.md", "UNIFORM_THEOREM.md"):
+s = p.read_text(encoding="utf-8").replace("∎", r"$\square$")
+for name in (
+    "TECHNICAL_NOTE.md",
+    "SMALL_R_NOTE.md",
+    "L4_PROOF.md",
+    "UNIFORM_THEOREM.md",
+    "PROOF_GUIDE.md",
+):
     s = s.replace(f"]({name}", f"](../docs/{name}")
 p.write_text(s, encoding="utf-8")
 PYFIX

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent exact verification of n0(r)=2r+4 for 4 <= r <= 10.
+"""Independently implemented exact cross-check for 4 <= r <= 10.
 
 This script imports none of the project proof/construction modules. It:
 
@@ -342,7 +342,10 @@ def main() -> None:
         )
 
     print("[OK] core carry changes sign between r=10 and r=11")
-    print("PASS: n_0(r)=2r+4 is certified for every 4 <= r <= 10")
+    print(
+        "PASS: exact finite obstruction, construction, and padding checks "
+        "passed (4 <= r <= 10)"
+    )
 
 
 if __name__ == "__main__":

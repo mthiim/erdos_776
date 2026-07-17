@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One-command verification for the complete-threshold candidate package."""
+"""One-command verification for the complete-threshold proof package."""
 from __future__ import annotations
 
 import subprocess

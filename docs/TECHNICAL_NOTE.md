@@ -1,6 +1,8 @@
 # An exact calculation at $r=11$ in the Erdős–Trotter antichain problem
 
-*Preliminary note, 15 July 2026. External review requested.*
+*Revised note, 17 July 2026. The result below is included in the end-to-end
+Lean theorem for every `r>=4`; independent specialist peer review remains
+pending.*
 
 ## 1. Definitions and result
 
@@ -15,7 +17,7 @@ level contains at least $r$ members. Let $g(n,r)$ be the maximum possible
 value of $|S(\mathcal F)|$. Following He and Tang, let $n_0(r)$ be the
 least threshold such that $g(n,r)=n-3$ for every $n>n_0(r)$.
 
-The result certified here is:
+The result proved here is:
 
 **Theorem.**
 
@@ -38,8 +40,10 @@ $$
 
 and equality forces the occupied levels to be exactly $2,3,\ldots,n-2$.
 In particular, a hypothetical 24-level witness at $(n,r)=(27,11)$ must
-occupy exactly $2,3,\ldots,25$. Trimming each of those levels to exactly
-11 members preserves the antichain property. Consequently,
+occupy exactly $2,3,\ldots,25$, with at least 11 members on each level.
+The lower-bound necessity theorem therefore obstructs such a witness
+directly, while recurrence feasibility constructs one with exactly 11
+members on each level. Consequently,
 
 $$
 g(27,11)=24
@@ -78,14 +82,24 @@ m_s=f_s,
 m_i=f_i+\partial_{i+1}(m_{i+1})\quad(i=s-1,s-2,\ldots,0).
 $$
 
-**Profile criterion.** There is an antichain on $[n]$ with profile $f$
-if and only if
+The form used in this package is deliberately asymmetric.
+
+**Necessity from lower bounds.** If an antichain has at least $f_i$ members
+on every level $i$, then
 
 $$
 m_i\le\binom ni
 $$
 
 for every $i$.
+
+**Sufficiency with equality.** Conversely, if all these capacities fit, the
+colex construction produces an antichain with exactly $f_i$ members on every
+level $i$.
+
+In particular, for an exact proposed profile this gives the usual if-and-only-if
+criterion.  The asymmetric statement avoids any trimming step in obstruction
+arguments.
 
 This is a formulation of the classical squashed-antichain profile theorem.
 A short proof is included so that the profile reduction and greedy construction
@@ -109,8 +123,9 @@ $$
 |M_i|\ge f_i+\partial_{i+1}(|M_{i+1}|).
 $$
 
-At the highest occupied level, $D_s=\varnothing$, so
-$|M_s|=f_s=m_s$. Starting from this base and using monotonicity of the
+At the highest requested level, whether or not there are family members above
+it, $M_s$ contains the level-$s$ slice of the antichain, so
+$|M_s|\ge f_s=m_s$. Starting from this base and using monotonicity of the
 Kruskal–Katona function gives $|M_i|\ge m_i$ by downward induction. Since
 $M_i$ consists of $i$-subsets of $[n]$, this implies
 $m_i\le\binom ni$.
@@ -186,8 +201,8 @@ $327=\binom{26}{2}+\binom21$, so
 $m_1=\partial_2(327)=26+1=27=\binom{27}{1}$.
 
 The colex construction therefore supplies 11 sets on each of the 23 levels
-$2,\ldots,24$. The generated family has 253 sets and passes the independent
-pairwise-containment checker. Hence
+$2,\ldots,24$. The generated family has 253 sets and passes a separately
+implemented pairwise-containment checker. Hence
 
 $$
 g(27,11)=23.
@@ -308,7 +323,7 @@ $$
 
 This note deliberately keeps the exact $r=11$ proof self-contained. A
 separate companion manuscript in [`UNIFORM_THEOREM.md`](UNIFORM_THEOREM.md)
-gives an AI-assisted proof candidate for
+gives an AI-assisted proof, now formalized in Lean, for
 
 $$
 n_0(r)=2r+5\qquad(r\ge11).
@@ -318,33 +333,23 @@ The exact calculation and stored certificates in this note do not depend on
 the uniform argument. Conversely, the uniform manuscript uses the same
 classical profile criterion and the core/padding framework developed here.
 The uniform argument has passed four adversarial AI audits but has not yet
-undergone traditional peer review; the repository records that distinction
-explicitly.
+undergone independent specialist peer review; the repository records that
+distinction explicitly.
 
 ## References
 
-1. P. Erdős, Problem sessions, in I. Rival (ed.), Ordered Sets (Proc. NATO Advanced Study Institute),
- Reidel, Dordrecht, 1981, pp. 860–861.
-
-2. R. K. Guy, A Miscellany of Erdős Problems, American Mathematical Monthly 90 (1983), no. 2, 118–120. DOI
- (https://doi.org/10.1080/00029890.1983.11971168).
-
-3. Y. He and Q. Tang, An Erdős–Trotter problem on antichains with multiplicity (r) on each occurring level,
- arXiv:2602.09803 (2026).
-
-4. J. B. Kruskal, The Number of Simplices in a Complex, in R. Bellman (ed.), Mathematical Optimization
- Techniques, University of California Press, Berkeley, 1963, pp. 251–278. Publisher record
- (https://www.degruyter.com/document/doi/10.1525/9780520319875-014/html).
-
-5. G. O. H. Katona, A Theorem of Finite Sets, in P. Erdős and G. Katona (eds.), Theory of Graphs (Proc.
- Colloquium, Tihany, 1966), Academic Press, New York, and Akadémiai Kiadó, Budapest, 1968, pp. 187–207.
- Academy repository (https://real.mtak.hu/21121/).
-
-6. G. F. Clements, A Minimization Problem Concerning Subsets of a Finite Set, Discrete Mathematics 4 (1973),
- 123–128. DOI (https://doi.org/10.1016/0012-365X(73)90074-5).
-
-7. D. E. Daykin, J. Godfrey, and A. J. W. Hilton, Existence Theorems for Sperner Families, Journal of
- Combinatorial Theory, Series A 17 (1974), 245–251. DOI (https://doi.org/10.1016/0097-3165(74)90011-9).
-
-8. P. Lieby, Antichains on Three Levels, Electronic Journal of Combinatorics 11 (2004), R50. Theorem 2.8
- (https://www.combinatorics.org/ojs/index.php/eljc/article/view/v11i1r50).
+1. P. Erdős, *Problem sessions*, in I. Rival (ed.), *Ordered Sets*
+   (Proc. NATO Advanced Study Institute), Reidel, Dordrecht, 1981,
+   pp. 860–861.
+2. Y. He and Q. Tang, *An Erdős--Trotter problem on antichains with
+   multiplicity $r$ on each occurring level*, arXiv:2602.09803 (2026),
+   <https://arxiv.org/abs/2602.09803>.
+3. G. F. Clements, *A Minimization Problem Concerning Subsets of a Finite
+   Set*, Discrete Mathematics **4** (1973), 123–128.
+4. D. E. Daykin, J. Godfrey, and A. J. W. Hilton, *Existence Theorems for
+   Sperner Families*, Journal of Combinatorial Theory, Series A **17**
+   (1974), 245–251.
+5. P. Lieby, *Antichains on Three Levels*, Electronic Journal of
+   Combinatorics **11** (2004), R50. Theorem 2.8 records the classical
+   prescribed-profile squashing theorem:
+   <https://www.combinatorics.org/ojs/index.php/eljc/article/view/v11i1r50>.
